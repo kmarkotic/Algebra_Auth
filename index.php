@@ -1,13 +1,7 @@
 <?php 
 
 	require_once 'core/init.php';
-
-	$DB = DB::getInstance()->query('select * from users where username=?',array('perozder'));
-	echo '<pre>';
-	var_dump($DB);
-	die();
-
-
+	
 	Helper::getHeader('Algebra Auth','main-header');
 
 //echo escape('<script> alert ("HAHHAHAHAHHHA"); </script>');
