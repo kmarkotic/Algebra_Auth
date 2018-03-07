@@ -55,11 +55,11 @@ class DB
 					if($this->query->execute()){
 						$this->results=$this->query->fetchAll($this->config['fetch']);
 						$this->count =$this->query->rowCount();
-						}else{
-							$this->error=true;
-						}
-						
+					}else{
+						$this->error=true;
 					}
+						
+				}
 
 					return $this;
 		}

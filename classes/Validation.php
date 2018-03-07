@@ -20,14 +20,34 @@ class Validation
 				$value =trim(Input::get($item));
 				
 				if(empty($value) && $rule=='required'){
-					$this->addError($item,"Field {item} is required.");
-				}else if (0){
-					
+					$this->addError($item,"Field {$item} is required.");
+				}else if (!empty($value)){
+					switch ($rule){
+							case 'min':
+								if(strlen($value) < $rule_value)
+								$this ->addError($item,"Field {$item} must have a minimum of {$rule_value} characters.");
+								break;
+							case 'max':
+								if(strlen($value) > $rule_value)
+								$this ->addError($item,"Field {$item} must have a maximum of {$rule_value} characters.");
+								break;
+							case 'matches':
+								if($value!= Input::get($rule_value))
+									$this->addError($item,"Field {$item} must match {$rule_value} field.");
+									break;
+							case 'unique':
+								$check = $this->db->get('id',$rule_value, array($item,'=',$value));
+								if($check->getCount())
+									$this->addError($item,"{$item} already exists.");
+								break;				
+					}
 				}
 				
 				
 			}
 		}
+		if(empty($this->errors))
+			$this->passed=true;
 		return $this;
 	}
 	
@@ -36,4 +56,16 @@ class Validation
 	{
 		$this->errors[$item] =$error;
 	}
+	public function getPassed()
+	{
+		return $this->passed;
+	}
+	
+	public function hasError($field)
+	{
+		if(isset($this->errors[$field]))
+			return $this->errors[$field];
+		return false;
+	}
+	
 }
